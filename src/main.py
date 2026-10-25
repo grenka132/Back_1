@@ -4,9 +4,9 @@ import fastapi_swagger_dark as fsd
 
 import uvicorn
 
-from src.config import setting
+from config import setting
 
-from src.router.animal import router as animal_router
+from router.animal import router as animal_router
 
 
 
@@ -27,12 +27,12 @@ app.include_router(router)
 
 if __name__ == '__main__':
     uvicorn.run(
-        'src.main:app',
+        'main:app',
         host='localhost',
         port=8000,
         reload=True
     )
 
-# Сделать системку для сохранения данных о животных и выдаче их по id (полный CRUD)
+# Сделать системку для сохранения данных о животных и выдаче их по id (полный CRUD) #сделал
 # либо в оперативке до перезапуска сервера
-# либо в файлик
+# либо в файлик #сделал
