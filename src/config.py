@@ -6,6 +6,7 @@ class Setting(BaseSettings):
         extra='ignore',
         env_file='.env'
     )
-    BASE_ROUTE_PATH: str
+    BASE_ROUTE_PATH: str = "/api/v1"
+    SAVE_FILE: str = "saves/save.json"
 
 setting = Setting()

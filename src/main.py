@@ -4,10 +4,9 @@ import fastapi_swagger_dark as fsd
 
 import uvicorn
 
-from config import setting
+from src.config import setting
 
-from router.animal import router as animal_router
-
+from src.router.animal import router as animal_router
 
 
 app = FastAPI(
@@ -15,11 +14,26 @@ app = FastAPI(
     openapi_url=f'{setting.BASE_ROUTE_PATH}/openapi.json'
 )
 
+app.openapi_tags = [
+    {
+        'name': 'create'
+    },
+    {
+        'name': 'read',
+        'description': 'Чтение данных'
+    },
+    {
+        'name': 'update'
+    },
+    {
+        'name': 'delete'
+    }
+]
+
+# list[dict[str, Any]]
 router = APIRouter(prefix=setting.BASE_ROUTE_PATH)
 
 router.include_router(animal_router, prefix='/animal', tags=['Animal'])
-
-
 
 fsd.install(router, path="/dark-docs")
 
@@ -27,7 +41,7 @@ app.include_router(router)
 
 if __name__ == '__main__':
     uvicorn.run(
-        'main:app',
+        'src.main:app',
         host='localhost',
         port=8000,
         reload=True

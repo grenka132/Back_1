@@ -1,3 +1,5 @@
 .venv/
 poetry.lock
+uv.lock
 .env
+__pycache__
