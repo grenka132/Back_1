@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter
 
 from src.adapter.save import save_data, read_data
 import src.schema.animal as animal

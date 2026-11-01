@@ -8,5 +8,6 @@ class Setting(BaseSettings):
     )
     BASE_ROUTE_PATH: str = "/api/v1"
     SAVE_FILE: str = "saves/save.json"
+    SQLALCHEMY_DATABASE_URL: str = "postgresql+asyncpg://user:password@localhost:5432/Save_DB"
 
 setting = Setting()

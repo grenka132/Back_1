@@ -8,6 +8,8 @@ from src.config import setting
 
 from src.router.animal import router as animal_router
 
+from src.router.building import router as building_router
+
 
 app = FastAPI(
     docs_url=f'{setting.BASE_ROUTE_PATH}/docs',
@@ -19,8 +21,7 @@ app.openapi_tags = [
         'name': 'create'
     },
     {
-        'name': 'read',
-        'description': 'Чтение данных'
+        'name': 'read'
     },
     {
         'name': 'update'
@@ -30,10 +31,10 @@ app.openapi_tags = [
     }
 ]
 
-# list[dict[str, Any]]
 router = APIRouter(prefix=setting.BASE_ROUTE_PATH)
 
 router.include_router(animal_router, prefix='/animal', tags=['Animal'])
+router.include_router(building_router, prefix='/building', tags=['Building'])
 
 fsd.install(router, path="/dark-docs")
 
@@ -46,7 +47,3 @@ if __name__ == '__main__':
         port=8000,
         reload=True
     )
-
-# Сделать системку для сохранения данных о животных и выдаче их по id (полный CRUD) #сделал
-# либо в оперативке до перезапуска сервера
-# либо в файлик #сделал
