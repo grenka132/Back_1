@@ -33,7 +33,7 @@ app.openapi_tags = [
 
 router = APIRouter(prefix=setting.BASE_ROUTE_PATH)
 
-router.include_router(animal_router, prefix='/animal', tags=['Animal'])
+router.include_router(animal_router)
 router.include_router(building_router, prefix='/building', tags=['Building'])
 
 fsd.install(router, path="/dark-docs")

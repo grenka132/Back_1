@@ -1,0 +1,3 @@
+Переделать env.py в migrations
+Сделать миграцию бд
+Развертка бд через docker compose

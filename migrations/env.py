@@ -11,7 +11,7 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from alembic import context
 
-from src.DB.session import Base
+from src.adapter.session import Base
 from src.model.animal import Animal
 from src.model.building import Building
 

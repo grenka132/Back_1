@@ -1,10 +1,16 @@
-from sqlalchemy.orm import Mapped, mapped_column
-from src.model.DBModel import DBModel
+import uuid
 
-class Building(DBModel):
+from sqlalchemy import String, UUID, Float
+
+from sqlalchemy.orm import Mapped, mapped_column
+from src.adapter.session import Base
+
+
+class Building(Base):
     __tablename__ = "building"
 
-    name: Mapped[str] = mapped_column(index=True)
-    description: Mapped[str] = mapped_column(index=True)
-    space: Mapped[float] = mapped_column(index=True)
-    locate: Mapped[str] = mapped_column(index=True)
+    uid: uuid.UUID = mapped_column(UUID, primary_key=True, default=uuid.uuid4)
+    name: Mapped[str] = mapped_column(String)
+    description: Mapped[str] = mapped_column(String)
+    space: Mapped[float] = mapped_column(Float)
+    locate: Mapped[str] = mapped_column(String)
