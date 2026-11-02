@@ -1,10 +1,9 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, status, Depends
+from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.adapter.save import save_data, read_data
-import src.schema.animal as animal
-
+from src.DB.session import get_async_session
+from src.schema.animal import AnimalCreate, AnimalResponse, AnimalUpdate, Animal
 from src.service.animal import AnimalService
-
 
 router = APIRouter()
 
@@ -15,30 +14,26 @@ async def hry() -> str:
 
 
 @router.post('/hry')
-async def create_hry(body: animal.AnimalCreate) -> animal.Animal:
+async def create_hry(body: AnimalCreate) -> Animal:
     return await AnimalService.create_hry({'id':0,**body.model_dump()})
 
 
-@router.post('/SaveCreate', tags = ['create'])
-async def savecreate(body: animal.AnimalCreate) -> str:
-    return await AnimalService.savecreate(body)
-    
-        
-@router.get('/SaveRead', tags = ['read'])
-async def saveread(ID: int) -> animal.Animal:
-    return await AnimalService.saveread(ID)
+@router.post('/DBCreate', tags = ['create'], response_model = AnimalResponse, status_code = status.HTTP_201_CREATED)
+async def create_building(animal_in: AnimalCreate, db: AsyncSession = Depends(get_async_session)):  
+    return await AnimalService.create(animal_in, db)
 
+@router.get('/DBReadSort', tags = ['read'], response_model = list[AnimalResponse])
+async def read_sort(name: str | None = None, sort_by: str = "id", db: AsyncSession = Depends(get_async_session)):
+    return await AnimalService.read_sort(name, sort_by, db)
 
-@router.get('/SaveReadAll', tags = ['read'])
-async def savereadall() -> list[animal.Animal]:
-    return await AnimalService.savereadall()
+@router.get('/DBReadOne', tags = ['read'], response_model = list[AnimalResponse])
+async def read_one(animal_id: int, db: AsyncSession = Depends(get_async_session)):
+    return await AnimalService.read_one(animal_id, db)
 
+@router.put('/DBUpdate', tags = ['update'], response_model = AnimalResponse) 
+async def update(animal_id: int, animal_in: AnimalUpdate, db: AsyncSession = Depends(get_async_session)):
+    return await AnimalService.update(animal_id, animal_in, db)
 
-@router.put('/SaveUpdate', tags = ['update'])
-async def saveupdate(ID: int, body: animal.AnimalUpdate) -> str:
-    return await AnimalService.saveupdate(ID, body)
-
-
-@router.delete('/SaveDelete', tags = ['delete'])
-async def savedelete(ID: int) -> str:
-    return await AnimalService.savedelete(ID)
+@router.delete('/DBDelete', tags = ['delete'], status_code = status.HTTP_204_NO_CONTENT)
+async def delete(animal_id: int, db: AsyncSession = Depends(get_async_session)):
+    return await AnimalService.delete(animal_id, db)
