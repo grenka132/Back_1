@@ -9,7 +9,7 @@ from src.adapter.session import Base
 class Animal(Base):
     __tablename__ = "animals"
 
-    uid: uuid.UUID = mapped_column(UUID, primary_key=True, default=uuid.uuid4)
+    uid: Mapped[uuid.UUID] = mapped_column(UUID, primary_key=True, default=uuid.uuid4)
     name: Mapped[str] = mapped_column(String)
     description: Mapped[str] = mapped_column(String)
     birthday: Mapped[date] = mapped_column(Date)

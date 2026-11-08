@@ -1,19 +1,16 @@
 import uuid
 
-from fastapi import Depends
 from sqlalchemy import delete, desc, select, update, or_
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.DB.session import get_async_session
-from src.model.animal import Animal
-from src.schema.animal import AminalFilter, AnimalCreate, AnimalUpdate
-from src.adapter.DB import DBFind, DBRefresh
+from src.model.animal import Animal as Model
+from src.schema.animal import AminalFilter, Animal, AnimalUpdate
 
 class AnimalService:
-    model = Animal
+    model = Model
 
     @classmethod
-    async def create(cls, body: AnimalCreate,  db_session: AsyncSession):  
+    async def create(cls, body: Animal,  db_session: AsyncSession):  
         model = cls.model(**body.model_dump())
         db_session.add(model)
         await db_session.commit()
@@ -88,9 +85,3 @@ class AnimalService:
     @classmethod
     async def hry() -> str:
         return 'Хрю-хрю'
-
-
-# В отдельных сервисах - роутерах схемах создать файлы для отдельной сущности. (Желательно иметь множество столбцов для сущности)
-# Реализовать схожую функционал (CRUD) но через базу данных + фильрация
-# +++ можно разобраться как превтратить pydantic-модель в query запрос fastapi 
-# Понять и простить уроки с 5 по 8

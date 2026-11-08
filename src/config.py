@@ -14,7 +14,7 @@ class DbSettings(BaseSettings):
     POSTGRES_PORT: int = 5432
     POSTGRES_USER: str
     POSTGRES_PASSWORD: str
-    POSTGRES_DB: str = "postgres"
+    POSTGRES_DB: str = "Save_DB"
     POSTGRES_DB_ECHO: bool = True
 
     SQLALCHEMY_DATABASE_URI: str | None = None
@@ -55,4 +55,4 @@ class Setting(BaseSettings):
     DB: DbSettings = DbSettings()
 
 
-setting = Setting()
+settings = Setting()

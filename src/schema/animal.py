@@ -1,10 +1,10 @@
 from datetime import date
 import uuid
 
-from pydantic import BaseModel, Field, ConfigDict, computed_field
+from pydantic import BaseModel, Field, computed_field
 
 
-class AnimalCreate(BaseModel):
+class Animal(BaseModel):
     name: str = Field(description='Имя животного')
     description: str = Field(description='Описание животного')
     birthday: date = Field(description='Дата рождения животного')

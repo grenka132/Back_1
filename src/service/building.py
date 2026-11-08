@@ -1,46 +1,73 @@
-from fastapi import Depends
-from sqlalchemy import select
+import uuid
+
+from sqlalchemy import delete, desc, select, update, or_
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.DB.session import get_async_session
-from src.model.building import Building
-from src.schema.building import BuildingCreate, BuildingUpdate
-from src.adapter.DB import DBFind, DBRefresh
+from src.model.building import Building as Model
+from src.schema.building import BuildingFilter, Building, BuildingUpdate
 
 class BuildingService:
-    @staticmethod
-    async def create(building_in: BuildingCreate, db: AsyncSession = Depends(get_async_session)):  
-        building = Building(**building_in.model_dump())
-        db.add(building)
-        return await DBRefresh(building, db)
+    model = Model
 
-    @staticmethod
-    async def read_sort(name: str | None = None, sort_by: str = "id", db: AsyncSession = Depends(get_async_session)):
-        query = select(Building)
-        if name:
-            query = query.where(Building.name.ilike(f"%{name}%"))
-        if sort_by == "name":
-            query = query.order_by(Building.name)
+    @classmethod
+    async def create(cls, body: Building,  db_session: AsyncSession):  
+        model = cls.model(**body.model_dump())
+        db_session.add(model)
+        await db_session.commit()
+        return model
+
+    @classmethod
+    async def get_list(cls,body: BuildingFilter, db_session: AsyncSession):
+        query = select(cls.model)
+
+        if body.limit > 0:
+            query = query.limit(body.limit)
+        if body.offset > 0:
+            query = query.offset(body.offset)
+
+        if body.search_string is not None:
+            query = query.where(
+                or_(
+                    cls.model.name.ilike(f"%{body.search_string}%"),
+                    cls.model.description.ilike(f"%{body.search_string}%")
+                )
+            )
+        if body.order_by is not None:
+            column = getattr(cls.model, body.order_by)
         else:
-            query = query.order_by(Building.id)
-        result = await db.execute(query)
+            column = None
+
+        # Учитываем направление сортировки (если в фильтре есть order_desc)
+        if column:
+            if body.order_desc:
+                query = query.order_by(desc(column))
+            else:
+                query = query.order_by(column)
+        
+        result = await db_session.execute(query)
         return result.scalars().all()
 
-    @staticmethod
-    async def read_one(building_id: int, db: AsyncSession = Depends(get_async_session)):
-        return await DBFind(Building, building_id, db)
 
-    @staticmethod
-    async def update(building_id: int, building_in: BuildingUpdate, db: AsyncSession = Depends(get_async_session)):
-        building = await DBFind(Building, building_id, db)
-        update_data = building_in.model_dump(exclude_unset=True)
-        for key, value in update_data.items():
-            setattr(building, key, value)           
-        return await DBRefresh(building, db)
+    @classmethod
+    async def get_by_uid(cls, uid: uuid.UUID, db_session: AsyncSession):
+        query = select(cls.model)
+        query = query.where(cls.model.uid == uid)
+        result = await db_session.execute(query)
+        return result.scalar()
 
-    @staticmethod
-    async def delete(building_id: int, db: AsyncSession = Depends(get_async_session)):
-        building = await DBFind(Building, building_id, db)
-        await db.delete(building)
-        await db.commit()
+    @classmethod
+    async def update(cls,uid: uuid.UUID, body: BuildingUpdate, db_session: AsyncSession):
+        query = update(cls.model)
+        query = query.where(cls.model.uid == uid)
+        query = query.values(**body.model_dump())
+        await db_session.execute(query)
+        await db_session.commit()
+        return cls.get_by_uid(uid)
+
+    @classmethod
+    async def delete(cls, uid: uuid.UUID, db_session: AsyncSession):
+        query = delete(cls.model)
+        query = query.where(cls.model.uid == uid)
+        await db_session.execute(query)
+        await db_session.commit()
         return "Success"
