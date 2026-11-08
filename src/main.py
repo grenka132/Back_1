@@ -4,7 +4,7 @@ import fastapi_swagger_dark as fsd
 
 import uvicorn
 
-from src.config import setting
+from src.config import settings as setting
 
 from src.router.animal import router as animal_router
 
