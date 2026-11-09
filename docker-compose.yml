@@ -40,3 +40,5 @@ services:
   
 networks:
   back-network:
+
+# Развернуть сборку модов terrafirmagreg через docker compose
