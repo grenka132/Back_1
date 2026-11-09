@@ -15,6 +15,17 @@ services:
     networks:
       - back-network
     
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "curl -f http://localhost:8000${BASE_ROUTE_PATH-/api/v1}/openapi.json || exit 1",
+        ]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    
   db:
     image: postgres:16
     container_name: project_db
