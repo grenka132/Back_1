@@ -20,13 +20,14 @@ services:
       OVERRIDE_SERVER_PROPERTIES: "false"
 
 
-      GENERIC_PACKS: TerraFirmaGreg-Modern-0.13.18-serverpack
+      GENERIC_PACKS: /TerraFirmaGreg-Modern-0.13.18-serverpack
       GENERIC_PACKS_SUFFIX: .zip
-      GENERIC_PACKS_PREFIX: https://github.com/TerraFirmaGreg-Team/Modpack-Modern/releases/download/0.13.18/
+      #GENERIC_PACKS_PREFIX: https://github.com/TerraFirmaGreg-Team/Modpack-Modern/releases/download/0.13.18/
 
     volumes:
       - ./data:/data
       - ./backups:/backups
+      - ./TerraFirmaGreg-Modern-0.13.18-serverpack.zip:/TerraFirmaGreg-Modern-0.13.18-serverpack.zip
 
 volumes:
   minecraft-data:
