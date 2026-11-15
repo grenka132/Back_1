@@ -3,3 +3,5 @@ poetry.lock
 uv.lock
 .env
 __pycache__
+data/
+backups/
