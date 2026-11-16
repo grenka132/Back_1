@@ -1,9 +1,11 @@
 import uuid
 
-from sqlalchemy import String, UUID, Float
+from pydantic import model_dump
+from sqlalchemy import UUID, Float, String
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from sqlalchemy.orm import Mapped, mapped_column
 from src.adapter.session import Base
+from src.schema.building import BuildingOutput
 
 
 class Building(Base):
@@ -14,3 +16,14 @@ class Building(Base):
     description: Mapped[str] = mapped_column(String)
     space: Mapped[float] = mapped_column(Float)
     locate: Mapped[str] = mapped_column(String)
+
+    animal_buildings = relationship(
+        'AnimalBuilding',
+        back_populates='building',
+        lazy='raise',
+        passive_deletes=True,
+    )
+
+    def serialize(self) -> BuildingOutput:
+        data = model_dump(self, exclude={"_sa_instance_state"})
+        return BuildingOutput(**data)

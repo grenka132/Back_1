@@ -1,15 +1,10 @@
-from fastapi import FastAPI, APIRouter
-
 import fastapi_swagger_dark as fsd
-
 import uvicorn
+from fastapi import APIRouter, FastAPI
 
 from src.config import settings as setting
-
 from src.router.animal import router as animal_router
-
 from src.router.building import router as building_router
-
 
 app = FastAPI(
     docs_url=f'{setting.BASE_ROUTE_PATH}/docs',

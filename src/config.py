@@ -1,8 +1,8 @@
 from typing import Any
 
-from pydantic import field_validator, PostgresDsn
+from pydantic import PostgresDsn, field_validator
 from pydantic_core.core_schema import ValidationInfo
-from pydantic_settings import SettingsConfigDict, BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class DbSettings(BaseSettings):

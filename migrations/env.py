@@ -1,22 +1,16 @@
 import asyncio
-
+import sys
 from logging.config import fileConfig
-
-from sqlalchemy import engine_from_config
-from sqlalchemy import pool
-
-from sqlalchemy.engine import Connection
-
-from sqlalchemy.ext.asyncio import async_engine_from_config
+from os.path import abspath, dirname
 
 from alembic import context
+from sqlalchemy import engine_from_config, pool
+from sqlalchemy.engine import Connection
+from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from src.adapter.session import Base
 from src.model.animal import Animal
 from src.model.building import Building
-
-import sys
-from os.path import dirname, abspath
 
 sys.path.insert(0, dirname(dirname(abspath(__file__))))
 
@@ -78,11 +72,10 @@ def do_run_migrations(connection: Connection) -> None:
 
 
 async def run_async_migrations() -> None:
-    """In this scenario we need to create an Engine
-    and associate a connection with the context.
+    """Create an Engine and associate a connection with the context.
 
+    This is needed because the configuration is async.
     """
-
     connectable = async_engine_from_config(
         configuration,
         # config.get_section(config.config_ini_section, {}),
@@ -98,7 +91,6 @@ async def run_async_migrations() -> None:
 
 def run_migrations_online() -> None:
     """Run migrations in 'online' mode."""
-
     asyncio.run(run_async_migrations())
 
 

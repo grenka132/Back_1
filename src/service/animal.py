@@ -1,16 +1,17 @@
 import uuid
 
-from sqlalchemy import delete, desc, select, update, or_
+from sqlalchemy import delete, desc, or_, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.model.animal import Animal as Model
 from src.schema.animal import AminalFilter, Animal, AnimalUpdate
 
+
 class AnimalService:
     model = Model
 
     @classmethod
-    async def create(cls, body: Animal,  db_session: AsyncSession):  
+    async def create(cls, body: Animal,  db_session: AsyncSession):
         model = cls.model(**body.model_dump())
         db_session.add(model)
         await db_session.commit()
@@ -49,7 +50,7 @@ class AnimalService:
                 query = query.order_by(desc(column))
             else:
                 query = query.order_by(column)
-        
+
         result = await db_session.execute(query)
         return result.scalars().all()
 
@@ -79,9 +80,9 @@ class AnimalService:
         return "Success"
 
     @classmethod
-    async def create_hry(body) -> Animal:
+    async def create_hry(cls, body) -> Animal:
         return body
 
     @classmethod
-    async def hry() -> str:
+    async def hry(cls) -> str:
         return 'Хрю-хрю'

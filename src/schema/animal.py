@@ -1,5 +1,5 @@
-from datetime import date
 import uuid
+from datetime import date
 
 from pydantic import BaseModel, Field, computed_field
 
@@ -33,7 +33,7 @@ class AnimalUpdate(BaseModel):
     birthday: date | None = Field(default=None, description='Дата рождения животного')
 
 
-class AmimalOutput(BaseModel):
+class AnimalOutput(BaseModel):
     uid: uuid.UUID = Field(description='UID животного')
     name: str = Field(description='Имя животного')
     description: str = Field(description='Описание животного')
