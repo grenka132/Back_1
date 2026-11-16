@@ -1,16 +1,33 @@
-version: '3.8'
 services:
-  db:
-    image: postgres:15
-    environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: inventory_db
+  minecraft:
+    image: itzg/minecraft-server:java17
+    container_name: terrafirmagreg-modern
+    tty: true
+    stdin_open: true
     ports:
-      - "5432:5432"
+      - "25565:25565"
+      - "24454:24454/udp" # simple voice chat
+    environment:
+      EULA: "true"
+      ENABLE_RCON: "false"
+      GUI: "false"
+      MEMORY: 8G
+
+      TYPE: forge
+      VERSION: 1.20.1
+      FORGE_VERSION: 47.4.13
+      SKIP_GENERIC_PACK_UPDATE_CHECK: "true"
+      OVERRIDE_SERVER_PROPERTIES: "false"
+
+
+      GENERIC_PACKS: /TerraFirmaGreg-Modern-0.13.18-serverpack
+      GENERIC_PACKS_SUFFIX: .zip
+      #GENERIC_PACKS_PREFIX: https://github.com/TerraFirmaGreg-Team/Modpack-Modern/releases/download/0.13.18/
+
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - ./data:/data
+      - ./backups:/backups
+      - ./TerraFirmaGreg-Modern-0.13.18-serverpack.zip:/TerraFirmaGreg-Modern-0.13.18-serverpack.zip
 
 volumes:
-  postgres_data:
-
+  minecraft-data:

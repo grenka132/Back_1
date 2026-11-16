@@ -1,0 +1,6 @@
+{
+    "python-envs.defaultEnvManager": "ms-python.python:venv",
+    "python.terminal.useEnvFile": true,
+    "terminal.integrated.env.linux": {"PYTHONPATH": "${workspaceFolder}"},
+    "python.envFile": "${workspaceFolder}/.env"
+}

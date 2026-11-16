@@ -1,0 +1,8 @@
+.venv/
+poetry.lock
+uv.lock
+.env
+__pycache__
+data/
+backups/
+TerraFirmaGreg-Modern-0.13.18-serverpack.zip
